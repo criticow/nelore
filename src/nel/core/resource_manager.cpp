@@ -17,7 +17,7 @@ Shader &ResourceManager::loadShader(const std::string &name, const char *vShader
 Shader &ResourceManager::loadShader(const std::string &name, Shader shader)
 {
   this->shaders[name] = shader;
-  LOGGER_DEBUG("Create Shader {}", name);
+  LOGGER_DEBUG("Created Shader {}", name);
   return this->shaders[name];
 }
 

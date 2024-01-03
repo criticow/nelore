@@ -19,5 +19,6 @@ class Window
   void destroy();
   void setTitle(const std::string &title);
   void setUserPointer();
+  void close();
   static void framebufferSizeCallback(GLFWwindow *handle, int width, int height);
 };

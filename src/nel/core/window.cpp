@@ -69,6 +69,11 @@ void Window::setUserPointer()
   glfwSetWindowUserPointer(this->handle, this);
 }
 
+void Window::close()
+{
+  glfwSetWindowShouldClose(this->handle, GLFW_TRUE);
+}
+
 void Window::framebufferSizeCallback(GLFWwindow *handle, int width, int height)
 {
   // Do nothing
@@ -78,6 +83,8 @@ void Window::framebufferSizeCallback(GLFWwindow *handle, int width, int height)
   }
 
   Window *windowPointer = reinterpret_cast<Window *>(glfwGetWindowUserPointer(handle));
+  ASSERT(windowPointer, "Could not find window user pointer");
+
   windowPointer->fbMutex.lock();
   windowPointer->isFramebufferUpdated = true;
   windowPointer->width = width;

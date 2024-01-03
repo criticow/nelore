@@ -41,6 +41,7 @@ void Engine::update()
   this->window.fbMutex.unlock();
 
   this->time.update();
+  this->input.update(this->window);
 
   // Calling the update function from the derived classes
   this->onUpdate();
