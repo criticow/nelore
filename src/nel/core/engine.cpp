@@ -1,5 +1,6 @@
 #include "engine.hpp"
 
+
 Engine::Engine(int width, int height, const char *title, bool centered)
 {
   this->window = Window(width, height, title, centered);
@@ -22,26 +23,7 @@ void Engine::run()
 void Engine::setup()
 {
   this->window.loadOpenGL();
-  const char *vShaderData = R"(
-    #version 460 core
-    layout (location = 0) in vec3 position;
-    void main()
-    {
-      gl_Position = vec4(position, 1.0);
-    }
-  )";
-
-  const char *fShaderData = R"(
-    #version 460 core
-    out vec4 fragColor;
-    void main()
-    {
-      fragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-  )";
-
-  Shader shader(vShaderData, fShaderData);
-  this->resourceManager.loadShader("default", shader);
+  this->resourceManager.loadShader("default", "data/shaders/default.vert", "data/shaders/default.frag");
 
   // Calling the setup from the derived classes
   this->onSetup();
