@@ -25,6 +25,7 @@ void Engine::setup()
 
 void Engine::update()
 {
+  // Update opengl viewport if the framebuffer is updated
   this->window.fbMutex.lock();
   if(this->window.isFramebufferUpdated)
   {
@@ -32,6 +33,13 @@ void Engine::update()
     glViewport(0, 0, this->window.width, this->window.height);
   }
   this->window.fbMutex.unlock();
+
+  this->time.update();
+
+  if(this->time.justUpdated)
+  {
+    this->window.setTitle(std::format("{:.2f}ms {:.2f}fps", this->time.ms, this->time.fps));
+  }
 }
 
 void Engine::gameLoop()
