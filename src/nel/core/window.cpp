@@ -1,5 +1,7 @@
 #include "window.hpp"
 
+std::mutex Window::fbMutex;
+
 Window::Window(int width, int height, const char* title, bool centered)
 {
   ASSERT(glfwInit(), "Could not initialize GLFW");
@@ -23,6 +25,9 @@ Window::Window(int width, int height, const char* title, bool centered)
     glfwSetWindowPos(this->handle, offsetX + (mode->width - windowWidth) / 2, offsetY + (mode->height - windowHeight) / 2);
     LOGGER_DEBUG("Centered Window");
   }
+
+  // Window callbacks
+  glfwSetFramebufferSizeCallback(this->handle, this->framebufferSizeCallback);
 }
 
 void Window::loadOpenGL()
@@ -56,4 +61,25 @@ void Window::destroy()
 void Window::setTitle(const std::string &title)
 {
   glfwSetWindowTitle(this->handle, title.c_str());
+}
+
+void Window::setUserPointer()
+{
+  glfwSetWindowUserPointer(this->handle, this);
+}
+
+void Window::framebufferSizeCallback(GLFWwindow *handle, int width, int height)
+{
+  // Do nothing
+  if(width == 0 || height == 0)
+  {
+    return;
+  }
+
+  Window *windowPointer = reinterpret_cast<Window *>(glfwGetWindowUserPointer(handle));
+  windowPointer->fbMutex.lock();
+  windowPointer->isFramebufferUpdated = true;
+  windowPointer->width = width;
+  windowPointer->height = height;
+  windowPointer->fbMutex.unlock();
 }

@@ -10,4 +10,7 @@ class Engine
   Engine(int width, int height, const char *title, bool centered);
   void run();
   void setup();
+  void update();
+  private:
+  void gameLoop();
 };
