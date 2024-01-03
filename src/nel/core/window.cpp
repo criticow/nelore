@@ -56,6 +56,7 @@ void Window::pollEvents()
 void Window::destroy()
 {
   glfwTerminate();
+  LOGGER_DEBUG("Destroyed Window");
 }
 
 void Window::setTitle(const std::string &title)

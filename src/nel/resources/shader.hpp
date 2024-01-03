@@ -1,7 +1,6 @@
 #pragma once
 
 #include <nelpch.hpp>
-#include <nel/util/logger.hpp>
 
 class Shader
 {

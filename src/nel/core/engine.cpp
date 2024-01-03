@@ -3,6 +3,7 @@
 Engine::Engine(int width, int height, const char *title, bool centered)
 {
   this->window = Window(width, height, title, centered);
+  this->window.setUserPointer();
 }
 
 void Engine::run()
@@ -15,12 +16,33 @@ void Engine::run()
   }
 
   gameThread.join();
-  this->window.destroy();
+  this->destroy();
 }
 
 void Engine::setup()
 {
-  this->window.setUserPointer();
+  this->window.loadOpenGL();
+  const char *vShaderData = R"(
+    #version 460 core
+    layout (location = 0) in vec3 position;
+    void main()
+    {
+      gl_Position = vec4(position, 1.0);
+    }
+  )";
+
+  const char *fShaderData = R"(
+    #version 460 core
+    out vec4 fragColor;
+    void main()
+    {
+      fragColor = vec4(1.0, 1.0, 1.0, 1.0);
+    }
+  )";
+
+  Shader shader(vShaderData, fShaderData);
+  this->resourceManager.loadShader("default", shader);
+
   // Calling the setup from the derived classes
   this->onSetup();
 }
@@ -42,14 +64,24 @@ void Engine::update()
   this->onUpdate();
 }
 
+void Engine::render()
+{
+  glClear(GL_COLOR_BUFFER_BIT);
+  this->window.swapBuffers();
+}
+
+void Engine::destroy()
+{
+  this->resourceManager.destroy();
+  this->window.destroy();
+}
+
 void Engine::gameLoop()
 {
-  this->window.loadOpenGL();
   this->setup();
   while(this->window.isOpen())
   {
     this->update();
-    glClear(GL_COLOR_BUFFER_BIT);
-    this->window.swapBuffers();
+    this->render();
   }
 }
