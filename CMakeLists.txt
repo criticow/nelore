@@ -13,7 +13,6 @@ endif()
 option(NEL_BUILD_TESTS "Build nelore engine tests" ON)
 
 add_subdirectory(src)
-
 if(NEL_BUILD_TESTS)
   add_subdirectory(tests)
 endif()
