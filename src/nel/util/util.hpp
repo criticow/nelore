@@ -4,3 +4,4 @@
 // Include all the headers form the util folder
 #include "file.hpp"
 #include "logger.hpp"
+#include "random.hpp"

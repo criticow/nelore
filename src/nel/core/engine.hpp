@@ -5,6 +5,8 @@
 #include <nel/core/time.hpp>
 #include <nel/core/resource_manager.hpp>
 #include <nel/core/input.hpp>
+#include <nel/ecs/scene.hpp>
+#include <nel/ecs/entity.hpp>
 
 class Engine
 {
