@@ -21,6 +21,8 @@ void Engine::run()
 void Engine::setup()
 {
   this->window.setUserPointer();
+  // Calling the setup from the derived classes
+  this->onSetup();
 }
 
 void Engine::update()
@@ -36,10 +38,8 @@ void Engine::update()
 
   this->time.update();
 
-  if(this->time.justUpdated)
-  {
-    this->window.setTitle(std::format("{:.2f}ms {:.2f}fps", this->time.ms, this->time.fps));
-  }
+  // Calling the update function from the derived classes
+  this->onUpdate();
 }
 
 void Engine::gameLoop()

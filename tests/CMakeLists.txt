@@ -1,3 +1,5 @@
 link_libraries(nelore)
 
-add_executable(tests main.cpp)
+file(GLOB_RECURSE SOURCE "*.cpp" "*.hpp")
+
+add_executable(tests ${SOURCE})

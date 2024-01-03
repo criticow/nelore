@@ -1,8 +1,8 @@
-#include <nel/nel.hpp>
+#include "game.hpp"
 
 int main()
 {
-  Engine engine(1280, 720, "Game", true);
-  engine.run();
+  Game game(1280, 720, "Game", true);
+  game.run();
   return 0;
 }
