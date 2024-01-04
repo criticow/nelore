@@ -5,6 +5,7 @@ Engine::Engine(int width, int height, const char *title, bool centered)
 {
   this->window = Window(width, height, title, centered);
   this->window.setUserPointer();
+  this->renderSystem3D = RenderSystem3D(&this->sceneManager, &this->resourceManager);
 }
 
 void Engine::run()
@@ -42,6 +43,9 @@ void Engine::update()
 
   this->time.update();
   this->input.update(this->window);
+  // Systems update cycle starts
+
+  // Systems update cycle ends
 
   // Calling the update function from the derived classes
   this->onUpdate();
@@ -50,29 +54,9 @@ void Engine::update()
 void Engine::render()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  Scene *activeScene = this->sceneManager.activeScene;
-
-  if(activeScene)
-  {
-    Shader &defaultShader = this->resourceManager.getShader("default");
-    defaultShader.use();
-
-    // Temporary
-    auto meshView = activeScene->handle.view<Transform, Mesh>();
-    for(auto [entity, transform, mesh]: meshView.each())
-    {
-      if(!this->resourceManager.hasResource<RenderObject>(mesh.name))
-      {
-        this->resourceManager.loadRenderObject(mesh.name, mesh.vertices, mesh.indices);
-      }
-
-      RenderObject &renderObject = this->resourceManager.getRenderObject(mesh.name);
-      renderObject.bind();
-      renderObject.render(mesh.indices.size());
-    }
-  }
-
+  // Systems render cycle starts
+  this->renderSystem3D.render();
+  // Systems render cycle ends
   this->window.swapBuffers();
 }
 
