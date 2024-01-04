@@ -5,5 +5,6 @@
 #include "engine.hpp"
 #include "input.hpp"
 #include "resource_manager.hpp"
+#include "scene_manager.hpp"
 #include "time.hpp"
 #include "window.hpp"

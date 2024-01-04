@@ -10,13 +10,13 @@ class Scene
 {
   public:
   std::string name;
+  entt::registry handle;
+
   Scene(){};
   Scene(const std::string &name);
 
   Entity addEntity();
-
   private:
-  entt::registry handle;
   
   template<typename T, typename... Args>
   T* addComponent(entt::entity entityHandle, Args&&... args)
@@ -27,12 +27,9 @@ class Scene
   template<typename T>
   T* getComponent(entt::entity entityHandle)
   {
-    ASSERT(
-      this->hasComponent<T>(entityHandle),
-      "Entity {} does not have the component {}",
-      entt::to_integral(entityHandle),
-      typeid(T).name()
-    );
+    std::string uuid = this->handle.get<UUID>(entityHandle).value;
+    // Makes sure the entity has the component
+    ASSERT(this->hasComponent<T>(entityHandle), "Entity {} does not have the component {}", uuid, typeid(T).name());
     return &this->handle.get<T>(entityHandle);
   }
 

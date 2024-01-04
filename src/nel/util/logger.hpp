@@ -110,16 +110,26 @@ std::ostream &operator<<(std::ostream &os, const btQuaternion &quat);
 
 #else
 
-#ifdef _WIN32
-  #define DEBUG_BREAK() __debugbreak()
+#if defined(_MSC_VER)
+  // For Visual Studio
+  #define DEBUG_BREAK __debugbreak()
+#elif defined(__GNUC__) || defined(__clang__)
+  // For GCC and Clang
+  #define DEBUG_BREAK __builtin_trap()
 #else
-  #define DEBUG_BREAK()
+  // For other compilers/platforms, you may need to adapt
+  #error "Unsupported compiler/platform for DEBUG_BREAK"
 #endif
 
 #define LOGGER_DEBUG(...) nel::logger.debug(__VA_ARGS__)
 #define LOGGER_WARN(...) nel::logger.warn(__VA_ARGS__)
 #define LOGGER_ERROR(...) nel::logger.error(__FILE__, __LINE__, __VA_ARGS__)
 #define LOGGER_CRITICAL(...) nel::logger.critical(__FILE__, __LINE__, __VA_ARGS__)
-#define ASSERT(condition, ...) if(!condition) { nel::logger.critical(__FILE__, __LINE__, __VA_ARGS__); DEBUG_BREAK(); }
+// #define ASSERT(condition, ...) if(!condition) { nel::logger.critical(__FILE__, __LINE__, __VA_ARGS__); DEBUG_BREAK(); }
+#define ASSERT(condition, ...) \
+  if (!(condition)) { \
+    nel::logger.critical(__FILE__, __LINE__, __VA_ARGS__); \
+    DEBUG_BREAK; \
+  }
 
 #endif

@@ -6,30 +6,33 @@
 class Entity
 {
   public:
+  entt::entity handle;
+
   Entity(){};
   Entity(Scene *scene);
 
   template<typename T, typename... Args>
-  T *addComponent(Args&&... args)
+  T* addComponent(Args&&... args)
   {
-    ASSERT(this->scene, "Scene not found/initialized");
-    return this->scene->addComponent<T>(this->handle, std::forward<Args>(args)...);
+    return &this->scene->handle.emplace_or_replace<T>(this->handle, std::forward<Args>(args)...);
   }
 
   template<typename T>
-  T *getComponent()
+  T* getComponent()
   {
-    return this->scene->getComponent<T>(this->handle);
+    std::string uuid = this->scene->handle.get<UUID>(this->handle).value;
+    // Makes sure the entity has the component
+    ASSERT(this->hasComponent<T>(), "Entity {} does not have the component {}", uuid, typeid(T).name());
+    return &this->scene->handle.get<T>(this->handle);
   }
 
   template<typename T>
   bool hasComponent()
   {
-    return this->scene->hasComponent<T>(this->handle);
+    return this->scene->handle.any_of<T>(this->handle);
   }
 
   private:
-  entt::entity handle;
   Scene *scene = nullptr;
 
   friend class Scene;

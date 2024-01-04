@@ -25,9 +25,6 @@ void Engine::setup()
   this->window.loadOpenGL();
   this->resourceManager.loadShader("default", "data/shaders/default.vert", "data/shaders/default.frag");
 
-  this->sceneManager.createScene("main");
-  this->sceneManager.setActive("main");
-
   // Calling the setup from the derived classes
   this->onSetup();
 }
@@ -53,6 +50,29 @@ void Engine::update()
 void Engine::render()
 {
   glClear(GL_COLOR_BUFFER_BIT);
+
+  Scene *activeScene = this->sceneManager.activeScene;
+
+  if(activeScene)
+  {
+    Shader &defaultShader = this->resourceManager.getShader("default");
+    defaultShader.use();
+
+    // Temporary
+    auto meshView = activeScene->handle.view<Transform, Mesh>();
+    for(auto [entity, transform, mesh]: meshView.each())
+    {
+      if(!this->resourceManager.hasResource<RenderObject>(mesh.name))
+      {
+        this->resourceManager.loadRenderObject(mesh.name, mesh.vertices, mesh.indices);
+      }
+
+      RenderObject &renderObject = this->resourceManager.getRenderObject(mesh.name);
+      renderObject.bind();
+      renderObject.render(mesh.indices.size());
+    }
+  }
+
   this->window.swapBuffers();
 }
 

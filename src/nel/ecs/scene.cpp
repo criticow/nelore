@@ -12,7 +12,7 @@ Entity Scene::addEntity()
   Entity entity(this);
   entity.handle = this->handle.create();
   entity.addComponent<UUID>(Random::UUID());
-  LOGGER_DEBUG("Created Entity {}", entity.getComponent<UUID>()->uuid);
+  LOGGER_DEBUG("Created Entity {}", entity.getComponent<UUID>()->value);
 
   return entity;
 }
