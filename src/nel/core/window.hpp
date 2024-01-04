@@ -21,4 +21,5 @@ class Window
   void setUserPointer();
   void close();
   static void framebufferSizeCallback(GLFWwindow *handle, int width, int height);
+  static void glDebugOutput(GLenum src, GLenum type, GLuint id, GLenum severity, GLsizei len, const char *msg, const void *usrParam);
 };
