@@ -7,6 +7,7 @@
 #include <nel/core/input.hpp>
 #include <nel/ecs/scene.hpp>
 #include <nel/ecs/entity.hpp>
+#include <nel/core/scene_manager.hpp>
 
 class Engine
 {
@@ -15,6 +16,7 @@ class Engine
   Time time;
   ResourceManager resourceManager;
   Input input;
+  SceneManager sceneManager;
   Engine(int width, int height, const char *title, bool centered);
   void run();
   virtual void onUpdate(){};

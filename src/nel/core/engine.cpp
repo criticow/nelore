@@ -25,6 +25,9 @@ void Engine::setup()
   this->window.loadOpenGL();
   this->resourceManager.loadShader("default", "data/shaders/default.vert", "data/shaders/default.frag");
 
+  this->sceneManager.createScene("main");
+  this->sceneManager.setActive("main");
+
   // Calling the setup from the derived classes
   this->onSetup();
 }
