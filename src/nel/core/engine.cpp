@@ -1,11 +1,13 @@
 #include "engine.hpp"
 
+#include <nel/ecs/render_system_3d.hpp>
 
 Engine::Engine(int width, int height, const char *title, bool centered)
 {
   this->window = Window(width, height, title, centered);
   this->window.setUserPointer();
-  this->renderSystem3D = RenderSystem3D(&this->sceneManager, &this->resourceManager);
+  this->renderSystem3D = RenderSystem3D(&this->sceneManager, &this->resourceManager, &this->cameraSystem);
+  this->cameraSystem = CameraSystem(&this->window, &this->sceneManager);
 }
 
 void Engine::run()
@@ -43,8 +45,9 @@ void Engine::update()
 
   this->time.update();
   this->input.update(this->window);
-  // Systems update cycle starts
 
+  // Systems update cycle starts
+  this->cameraSystem.update();
   // Systems update cycle ends
 
   // Calling the update function from the derived classes
@@ -54,9 +57,11 @@ void Engine::update()
 void Engine::render()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
   // Systems render cycle starts
   this->renderSystem3D.render();
   // Systems render cycle ends
+
   this->window.swapBuffers();
 }
 

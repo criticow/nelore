@@ -47,14 +47,12 @@ struct Light
 struct Vertex
 {
   glm::vec3 position;
-  glm::vec2 uv;
+  glm::vec2 texCoords;
   glm::vec3 normal;
 
   Vertex(void) = default;
-  Vertex(const glm::vec3 position, const glm::vec2 uv, const glm::vec3 normal) :
-    position(position), uv(uv), normal(normal) {}
-  // Vertex(const aiVector3D position, const aiVector2D uv, const aiVector3D normal) :
-  //   position(position.x, position.y, position.z), uv(uv.x, uv.y), normal(normal.x, normal.y, normal.z) {}
+  Vertex(const glm::vec3 position, const glm::vec2 texCoords, const glm::vec3 normal) :
+    position(position), texCoords(texCoords), normal(normal) {}
 };
 
 struct Mesh

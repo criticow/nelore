@@ -4,6 +4,9 @@ std::mutex Window::fbMutex;
 
 Window::Window(int width, int height, const char* title, bool centered)
 {
+  this->width = width;
+  this->height = height;
+
   ASSERT(glfwInit(), "Could not initialize GLFW");
 
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -75,7 +78,8 @@ void Window::swapBuffers()
 
 void Window::pollEvents()
 {
-  glfwPollEvents();
+  // glfwPollEvents();
+  glfwWaitEvents();
 }
 
 void Window::destroy()

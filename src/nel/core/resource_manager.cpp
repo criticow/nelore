@@ -17,7 +17,7 @@ Shader &ResourceManager::loadShader(const std::string &name, const char *vShader
 Shader &ResourceManager::loadShader(const std::string &name, Shader shader)
 {
   this->shaders[name] = shader;
-  LOGGER_DEBUG("Created Shader {}", name);
+  LOGGER_DEBUG("Loaded Shader {}", name);
   return this->shaders[name];
 }
 
@@ -35,8 +35,26 @@ RenderObject &ResourceManager::loadRenderObject(const std::string &name, std::ve
 RenderObject &ResourceManager::loadRenderObject(const std::string &name, RenderObject renderObject)
 {
   this->renderObjects[name] = renderObject;
-  LOGGER_DEBUG("Created RenderObject {}", name);
+  LOGGER_DEBUG("Loaded RenderObject {}", name);
   return this->renderObjects[name];
+}
+
+Model &ResourceManager::getModel(const std::string &name)
+{
+  ASSERT(this->hasResource<Model>(name), "Model not found {}", name);
+  return this->models[name];
+}
+
+Model &ResourceManager::loadModel(const std::string &name, const char *modelPath)
+{
+  return this->loadModel(name, Model(modelPath));
+}
+
+Model &ResourceManager::loadModel(const std::string &name, Model model)
+{
+  this->models[name] = model;
+  LOGGER_DEBUG("Loaded Model {}", name);
+  return this->models[name];
 }
 
 void ResourceManager::destroy()

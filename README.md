@@ -3,7 +3,7 @@
 I am using vcpkg to install the dependencies used on this project.
 
 ```
-vcpkg install glm entt glad glfw3 assimp stb bullet3 --triplet x64-windows
+vcpkg install glm entt glad glfw3 bullet3 --triplet x64-windows
 ```
 
 The toolchain is being specified in the root [CMakeLists.txt](CMakeLists.txt) file.
@@ -21,7 +21,6 @@ The linking is being done in the [src/CMakeLists.txt](src/CMakeLists.txt) as PUB
 # Locating packages installed globally via vcpkg
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
-find_package(assimp CONFIG REQUIRED)
 find_package(Bullet CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
@@ -32,7 +31,6 @@ target_link_libraries(nelore PUBLIC
   EnTT::EnTT
   glm::glm
   glad::glad
-  assimp::assimp
   ${BULLET_LIBRARIES}
 )
 ...

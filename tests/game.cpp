@@ -27,6 +27,7 @@ void Game::onUpdate()
 
 void Game::onSetup()
 {
+  Model &model = this->resourceManager.loadModel("cube", "data/models/cube.gltf");
   // Tests
   this->sceneManager.createScene("main");
   this->sceneManager.createScene("secondary");
@@ -37,27 +38,10 @@ void Game::onSetup()
 
   Entity entity = main.addEntity();
   entity.addComponent<Transform>();
-  std::vector<Vertex> vertices = {
-    {glm::vec3(0.0f, 0.5f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f)},
-    {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f)},
-    {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f)},
-  };
-  std::vector<GLuint> indices = {0, 1, 2};
-  entity.addComponent<Mesh>("triangle", vertices, indices);
+  entity.addComponent<Mesh>(model.mesh);
 
-  Scene &secondary = this->sceneManager.getScene("secondary");
-  Entity entity2 = secondary.addEntity();
-  entity2.addComponent<Transform>();
-  std::vector<Vertex> vertices2 = {
-    {glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f)},
-    {glm::vec3(0.5f, 0.5f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f)},
-    {glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f)},
-    {glm::vec3(0.5f, -0.5f, 0.0f), glm::vec2(0.0f), glm::vec3(0.0f)},
-  };
-  std::vector<GLuint> indices2 = {
-    0, 1, 2,
-    0, 3, 1
-  };
-
-  entity2.addComponent<Mesh>("rectangle", vertices2, indices2);
+  Entity camera = main.addEntity();
+  camera.addComponent<Transform>(glm::vec3(0.0f, 10.0f, 15.0f), glm::vec3(0.0f), glm::vec3(1.0f));
+  camera.addComponent<Projection>();
+  camera.getComponent<Projection>()->active = true;
 }

@@ -5,10 +5,9 @@
 #include <nel/core/time.hpp>
 #include <nel/core/resource_manager.hpp>
 #include <nel/core/input.hpp>
-#include <nel/ecs/scene.hpp>
-#include <nel/ecs/entity.hpp>
 #include <nel/core/scene_manager.hpp>
 #include <nel/ecs/render_system_3d.hpp>
+#include <nel/ecs/camera_system.hpp>
 
 class Engine
 {
@@ -32,6 +31,7 @@ class Engine
   Input input;
   SceneManager sceneManager;
   RenderSystem3D renderSystem3D;
+  CameraSystem cameraSystem;
 
   Engine(int width, int height, const char *title, bool centered);
 

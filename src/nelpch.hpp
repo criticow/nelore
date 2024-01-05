@@ -13,6 +13,7 @@
 #include <iomanip>
 #include <random>
 #include <cctype>
+#include <string>
 
 // Math
 #include <glm/glm.hpp>
@@ -28,5 +29,10 @@
 
 // ECS
 #include <entt/entt.hpp>
+
+// Model loader
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include <nel/util/logger.hpp>

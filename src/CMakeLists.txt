@@ -14,10 +14,10 @@ target_precompile_headers(nelore PRIVATE nelpch.hpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC
   glfw
   glad::glad
-  assimp::assimp
   ${BULLET_LIBRARIES}
   glm::glm
   EnTT::EnTT
+  assimp::assimp
 )
 
 target_include_directories(nelore PUBLIC

@@ -4,5 +4,6 @@
 #include <nelpch.hpp>
 
 #include "core/core.hpp"
-#include "util/util.hpp"
+#include "ecs/ecs.hpp"
 #include "resources/resources.hpp"
+#include "util/util.hpp"
