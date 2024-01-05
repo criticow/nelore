@@ -15,7 +15,6 @@ void RenderSystem3D::render()
     Shader &defaultShader = this->resourceManager->getShader("default");
     defaultShader.use();
 
-    // Temporary
     auto meshView = activeScene->handle.view<Transform, Mesh>();
     for(auto [entity, transform, mesh]: meshView.each())
     {
