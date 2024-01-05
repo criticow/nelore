@@ -1,6 +1,7 @@
 #pragma once
 
 #include <nelpch.hpp>
+#include <nel/resources/texture_2d.hpp>
 
 struct UUID
 {
@@ -60,4 +61,12 @@ struct Mesh
   std::string name;
   std::vector<Vertex> vertices;
   std::vector<GLuint> indices;
+};
+
+struct Material
+{
+  Texture2D diffuseTexture;
+  glm::vec3 diffuseColor = glm::vec3(0.207f);
+  glm::vec3 specularColor = glm::vec3(0.5f);
+  float shininess = 250.0f;
 };

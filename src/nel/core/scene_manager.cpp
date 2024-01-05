@@ -10,6 +10,11 @@ Scene &SceneManager::createScene(const std::string &name)
 {
   this->scenes[name] = Scene(name);
   LOGGER_DEBUG("Created Scene {}", name);
+  if(!this->activeScene)
+  {
+    this->setActive(name);
+  }
+
   return this->scenes[name];
 }
 

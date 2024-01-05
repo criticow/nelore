@@ -18,6 +18,7 @@
 // Math
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 // Physics
 #include <bullet/btBulletDynamicsCommon.h>
