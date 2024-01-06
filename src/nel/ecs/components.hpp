@@ -41,7 +41,7 @@ struct Light
   Type type = DIRECTIONAL;
   glm::vec3 color = glm::vec3(1.0f);
   glm::vec3 diffuse = color * glm::vec3(1.0f);
-  glm::vec3 ambient = diffuse * glm::vec3(0.57f);
+  glm::vec3 ambient = color * glm::vec3(0.57f);
   glm::vec3 specular = glm::vec3(1.0f);
 };
 

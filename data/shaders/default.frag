@@ -52,8 +52,15 @@ void main()
 
   // SPECULAR
   vec3 viewDir    = normalize(viewPos - fs_in.fragPos);
-  vec3 reflectDir = reflect(-lightDir, norm);
-  float spec      = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+  
+  // -- PHONG
+  // vec3 reflectDir = reflect(-lightDir, norm);
+  // float spec      = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+
+  // -- BLINN-PHONG
+  vec3 halfwayDir = normalize(lightDir + viewDir);
+  float spec      = pow(max(dot(norm, halfwayDir), 0.0), material.shininess * 2.0);
+
   vec3 specular   = light.specular * (spec * material.specular);
 
   vec3 result     = ambient + diffuse + specular;

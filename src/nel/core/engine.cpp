@@ -26,6 +26,7 @@ void Engine::run()
 void Engine::setup()
 {
   this->window.loadOpenGL();
+  glClearColor(0.1921569f, 0.3019608f, 0.4745098f, 1.0f);
   this->resourceManager.loadShader("default", "data/shaders/default.vert", "data/shaders/default.frag");
 
   // Calling the setup from the derived classes

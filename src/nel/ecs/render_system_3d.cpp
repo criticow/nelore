@@ -11,8 +11,7 @@ void RenderSystem3D::render()
 {
   Scene *activeScene = this->sceneManager->activeScene;
 
-
-  if(activeScene)
+  if(activeScene && cameraSystem->transform)
   {
     Shader &defaultShader = this->resourceManager->getShader("default");
     defaultShader.use();
@@ -32,6 +31,8 @@ void RenderSystem3D::render()
         defaultShader.setFloat("light.specular", light.specular);
       }
     }
+
+    defaultShader.setFloat("viewPos", this->cameraSystem->transform->position);
 
     auto meshView = activeScene->handle.view<Transform, Mesh, Material>();
     for(auto [entity, transform, mesh, material]: meshView.each())

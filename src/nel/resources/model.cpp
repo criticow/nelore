@@ -11,6 +11,7 @@ Model::Model(const char *path)
 
   this->mesh.name = mesh->mName.C_Str();
 
+  // Parsing vertices
   this->mesh.vertices.reserve(mesh->mNumVertices);
   for(size_t i = 0; i < mesh->mNumVertices; i++)
   {
@@ -28,6 +29,7 @@ Model::Model(const char *path)
     );
   }
 
+  // Parsing indices
   this->mesh.indices.reserve(mesh->mNumFaces * mesh->mFaces[0].mNumIndices);
   for(size_t i = 0; i < mesh->mNumFaces; i++)
   {
@@ -35,6 +37,24 @@ Model::Model(const char *path)
     {
       this->mesh.indices.push_back(mesh->mFaces[i].mIndices[j]);
     }
+  }
+
+  // Default Material
+  this->material.specularColor = glm::vec3(0.5f);
+  this->material.diffuseColor = glm::vec3(0.207f);
+  this->material.specularColor = glm::vec3(0.5f);
+  this->material.shininess = 250.0f;
+
+  // Parsing material/textures
+  aiMaterial *mat = scene->mMaterials[mesh->mMaterialIndex];
+  if(mat->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+  {
+    aiString str;
+    mat->GetTexture(aiTextureType_DIFFUSE, 0, &str);
+    std::string path = str.C_Str();
+    path = path.substr(path.find_last_of("/") + 1);
+    path = "data/textures/" + path;
+    this->material.diffuseTexture = Texture2D(path.c_str());
   }
 
   importer.FreeScene();

@@ -7,6 +7,7 @@ class Model
 {
   public:
   Mesh mesh;
+  Material material;
   Model(){};
   Model(const char *path);
 };
