@@ -39,6 +39,7 @@ struct Light
   };
 
   Type type = DIRECTIONAL;
+  bool castShadow;
   glm::vec3 color = glm::vec3(1.0f);
   glm::vec3 diffuse = color * glm::vec3(1.0f);
   glm::vec3 ambient = color * glm::vec3(0.57f);
@@ -65,7 +66,7 @@ struct Mesh
 
 struct Material
 {
-  Texture2D diffuseTexture;
+  Texture2D *diffuseTexture = nullptr;
   glm::vec3 diffuseColor = glm::vec3(0.207f);
   glm::vec3 specularColor = glm::vec3(0.5f);
   float shininess = 250.0f;

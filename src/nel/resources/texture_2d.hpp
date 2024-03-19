@@ -8,11 +8,13 @@ class Texture2D
   GLuint handle = 0;
   Texture2D(){};
   Texture2D(const char *path);
-  void bind();
+  // Shadow Map texture
+  Texture2D(GLsizei width, GLsizei height);
+  void bind(GLenum position = GL_TEXTURE0);
   void destroy();
 
-  operator bool() const
-  {
-    return handle != 0;
-  }
+  // operator bool() const
+  // {
+  //   return handle != 0;
+  // }
 };

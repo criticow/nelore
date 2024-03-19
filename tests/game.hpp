@@ -1,6 +1,6 @@
 #pragma once
 
-#include <nel/nel.hpp>
+#include <nel/_nel.hpp>
 
 class Game : public Engine
 {

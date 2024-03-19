@@ -38,6 +38,11 @@ void Shader::setInt(const std::string &name, GLint value)
   glUniform1i(this->getLocation(name), value);
 }
 
+void Shader::setFloat(const std::string &name, GLfloat value)
+{
+  glUniform1f(this->getLocation(name), value);
+}
+
 void Shader::setFloat(const std::string &name, glm::vec2 value)
 {
   glUniform2fv(this->getLocation(name), 1, &value[0]);

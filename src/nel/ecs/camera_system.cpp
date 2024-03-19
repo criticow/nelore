@@ -34,10 +34,10 @@ void CameraSystem::update()
     float width = static_cast<float>(this->window->width);
     float height = static_cast<float>(this->window->height);
 
-    glm::mat4 rotatedMatrix = glm::mat4(1.0f);
 
     glm::vec3 finalPosition = this->transform->position + this->target;
 
+    glm::mat4 rotatedMatrix = glm::mat4(1.0f);
     // Apply yaw, pitch, and roll
     rotatedMatrix = glm::rotate(rotatedMatrix, -glm::radians(this->transform->rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // Roll
     rotatedMatrix = glm::rotate(rotatedMatrix, -glm::radians(this->transform->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // Pitch

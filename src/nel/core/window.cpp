@@ -1,11 +1,14 @@
 #include "window.hpp"
 
-std::mutex Window::fbMutex;
+std::mutex Window::framebufferMutex;
+std::mutex Window::cursorPosMutex;
 
 Window::Window(int width, int height, const char* title, bool centered)
 {
   this->width = width;
   this->height = height;
+  this->mouse.lastX = this->width * 0.5f;
+  this->mouse.lastY = this->height * 0.5f;
 
   ASSERT(glfwInit(), "Could not initialize GLFW");
 
@@ -36,6 +39,7 @@ Window::Window(int width, int height, const char* title, bool centered)
 
   // Window callbacks
   glfwSetFramebufferSizeCallback(this->handle, this->framebufferSizeCallback);
+  glfwSetCursorPosCallback(this->handle, cursorPosCallback);
 }
 
 void Window::loadOpenGL()
@@ -64,6 +68,7 @@ void Window::loadOpenGL()
     LOGGER_DEBUG("Set OpenGL Debugger");
   }
 
+  this->isOpenglLoaded = true;
 }
 
 bool Window::isOpen()
@@ -78,7 +83,11 @@ void Window::swapBuffers()
 
 void Window::pollEvents()
 {
-  // glfwPollEvents();
+  glfwPollEvents();
+}
+
+void Window::waitEvents()
+{
   glfwWaitEvents();
 }
 
@@ -86,6 +95,11 @@ void Window::destroy()
 {
   glfwTerminate();
   LOGGER_DEBUG("Destroyed Window");
+}
+
+void Window::hideCursor()
+{
+  glfwSetInputMode(this->handle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void Window::setTitle(const std::string &title)
@@ -96,6 +110,19 @@ void Window::setTitle(const std::string &title)
 void Window::setUserPointer()
 {
   glfwSetWindowUserPointer(this->handle, this);
+}
+
+void Window::updateViewport()
+{
+  ASSERT(this->isOpenglLoaded, "OpenGL is not loaded");
+
+  this->framebufferMutex.lock();
+  if(this->isFramebufferUpdated)
+  {
+    this->isFramebufferUpdated = false;
+    glViewport(0, 0, this->width, this->height);
+  }
+  this->framebufferMutex.unlock();
 }
 
 void Window::close()
@@ -114,11 +141,11 @@ void Window::framebufferSizeCallback(GLFWwindow *handle, int width, int height)
   Window *windowPointer = reinterpret_cast<Window *>(glfwGetWindowUserPointer(handle));
   ASSERT(windowPointer, "Could not find window user pointer");
 
-  windowPointer->fbMutex.lock();
+  windowPointer->framebufferMutex.lock();
   windowPointer->isFramebufferUpdated = true;
   windowPointer->width = width;
   windowPointer->height = height;
-  windowPointer->fbMutex.unlock();
+  windowPointer->framebufferMutex.unlock();
 }
 
 void Window::glDebugOutput(GLenum src, GLenum type, GLuint id, GLenum severity, GLsizei len, const char *msg, const void *usrParam)
@@ -162,4 +189,29 @@ void Window::glDebugOutput(GLenum src, GLenum type, GLuint id, GLenum severity, 
   }
 
   LOGGER_ERROR(sstream.str());
+}
+
+void Window::cursorPosCallback(GLFWwindow *handle, double xPos, double yPos)
+{
+  Window *windowPointer = reinterpret_cast<Window*>(glfwGetWindowUserPointer(handle));
+  ASSERT(windowPointer, "Could not find window user pointer");
+
+  windowPointer->cursorPosMutex.lock();
+  windowPointer->isCursorPosUpdated = true;
+
+  if(windowPointer->mouse.firstMouse)
+  {
+    windowPointer->mouse.firstMouse = false;
+    windowPointer->mouse.x = xPos;
+    windowPointer->mouse.y = yPos;
+  }
+  
+  // Update mouse position
+  windowPointer->mouse.lastX = windowPointer->mouse.x;
+  windowPointer->mouse.lastY = windowPointer->mouse.y;
+
+  // Update mouse last position
+  windowPointer->mouse.x = xPos;
+  windowPointer->mouse.y = yPos;
+  windowPointer->cursorPosMutex.unlock();
 }

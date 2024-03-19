@@ -1,5 +1,6 @@
 #include "game.hpp"
 
+Entity cube3;
 glm::vec3 target(0.0f);
 
 void Game::onUpdate()
@@ -44,12 +45,13 @@ void Game::onUpdate()
     target.z += 10.0f * this->time.deltaTime;
   }
 
+  cube3.getComponent<Transform>()->rotation.y += 60.0f * this->time.deltaTime;
+
   this->cameraSystem.target = target;
 }
 
 void Game::onSetup()
 {
-  Model &model = this->resourceManager.loadModel("cube", "data/models/cube.gltf");
   Model &unwrappedCube = this->resourceManager.loadModel("unwrappedCube", "data/models/unwrapped_cube.gltf");
 
   // Tests
@@ -91,16 +93,17 @@ void Game::onSetup()
   c2Trans->position = glm::vec3(2.0f, 0.0f, 1.0f);
   c2Trans->scale = glm::vec3(0.5f);
 
-  Entity cube3 = main.addEntity();
+  cube3 = main.addEntity();
   cube3.addComponent<Mesh>(unwrappedCube.mesh);
   cube3.addComponent<Material>(unwrappedCube.material);
   Transform *c3Trans = cube3.getComponent<Transform>();
   c3Trans->position = glm::vec3(-1.0f, 0.0f, 2.0f);
-  c3Trans->rotation = glm::vec3(60.0f, 0.0f, 60.0f);
+  // c3Trans->rotation = glm::vec3(60.0f, 0.0f, 60.0f);
   c3Trans->scale = glm::vec3(0.25f);
 
   Transform *cameraTransform = camera.getComponent<Transform>();
-  cameraTransform->position = glm::vec3(-3.0f, 4.0f, 10.0f);
+  // cameraTransform->position = glm::vec3(-3.0f, 4.0f, 10.0f);
+  cameraTransform->position = glm::vec3(0.0f, 1.0f, 10.0f);
   Projection *projection = camera.getComponent<Projection>();
   projection->active = true;
   projection->near = 0.3f;

@@ -1,6 +1,8 @@
 #include "model.hpp"
 
-Model::Model(const char *path)
+#include <nel/core/resource_manager.hpp>
+
+Model::Model(const char *path, ResourceManager *resourceManager)
 {
   Assimp::Importer importer;
   const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
@@ -52,9 +54,24 @@ Model::Model(const char *path)
     aiString str;
     mat->GetTexture(aiTextureType_DIFFUSE, 0, &str);
     std::string path = str.C_Str();
-    path = path.substr(path.find_last_of("/") + 1);
-    path = "data/textures/" + path;
-    this->material.diffuseTexture = Texture2D(path.c_str());
+    std::string texName = path.substr(path.find_last_of("/") + 1);
+    path = "data/textures/" + texName;
+
+    if(resourceManager) // Load using resource manager
+    {
+      if(resourceManager->hasResource<Texture2D>(texName)) // Texture already exists
+      {
+        this->material.diffuseTexture = &resourceManager->getTexture2D(texName);
+      }
+      else // Create a new texture
+      {
+        this->material.diffuseTexture=  &resourceManager->loadTexture2D(texName, path.c_str());
+      }
+    }
+    else // Standalone loading
+    {
+      this->material.diffuseTexture = new Texture2D(path.c_str());
+    }
   }
 
   importer.FreeScene();

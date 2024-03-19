@@ -2,6 +2,7 @@
 
 #include <nelpch.hpp>
 // Include all the headers from the resources folder
+#include "framebuffer.hpp"
 #include "model.hpp"
 #include "render_object.hpp"
 #include "shader.hpp"

@@ -21,6 +21,24 @@ Shader &ResourceManager::loadShader(const std::string &name, Shader shader)
   return this->shaders[name];
 }
 
+Texture2D & ResourceManager::getTexture2D(const std::string & name)
+{
+  ASSERT(this->hasResource<Texture2D>(name), "Texture2D not found {}", name);
+  return this->textures2D[name];
+}
+
+Texture2D &ResourceManager::loadTexture2D(const std::string &name, const char *texPath)
+{
+  return this->loadTexture2D(name, Texture2D(texPath));
+}
+
+Texture2D &ResourceManager::loadTexture2D(const std::string &name, Texture2D texture)
+{
+  this->textures2D[name] = texture;
+  LOGGER_DEBUG("Loaded Texture2D {}", name);
+  return this->textures2D[name];
+}
+
 RenderObject &ResourceManager::getRenderObject(const std::string &name)
 {
   ASSERT(this->hasResource<RenderObject>(name), "RenderObject not found {}", name);
@@ -47,7 +65,7 @@ Model &ResourceManager::getModel(const std::string &name)
 
 Model &ResourceManager::loadModel(const std::string &name, const char *modelPath)
 {
-  return this->loadModel(name, Model(modelPath));
+  return this->loadModel(name, Model(modelPath, this));
 }
 
 Model &ResourceManager::loadModel(const std::string &name, Model model)
@@ -55,6 +73,24 @@ Model &ResourceManager::loadModel(const std::string &name, Model model)
   this->models[name] = model;
   LOGGER_DEBUG("Loaded Model {}", name);
   return this->models[name];
+}
+
+Framebuffer &ResourceManager::getFramebuffer(const std::string &name)
+{
+  ASSERT(this->hasResource<Framebuffer>(name), "Framebuffer not found {}",name);
+  return this->framebuffers[name];
+}
+
+Framebuffer &ResourceManager::loadFramebuffer(const std::string &name, Texture2D texture)
+{
+  return this->loadFramebuffer(name, Framebuffer(texture));
+}
+
+Framebuffer &ResourceManager::loadFramebuffer(const std::string &name, Framebuffer framebuffer)
+{
+  this->framebuffers[name] = framebuffer;
+  LOGGER_DEBUG("Loaded Framebuffer {}", name);
+  return this->framebuffers[name];
 }
 
 void ResourceManager::destroy()
@@ -70,6 +106,18 @@ void ResourceManager::destroy()
     renderObject.destroy();
   }
   LOGGER_DEBUG("Destroyed {} RenderObjects", this->renderObjects.size());
+
+  for(auto [name, texture2D] : this->textures2D)
+  {
+    texture2D.destroy();
+  }
+  LOGGER_DEBUG("Destroyed {} Textures2D", this->textures2D.size());
+
+  for(auto [name, framebuffer] : this->framebuffers)
+  {
+    framebuffer.destroy();
+  }
+  LOGGER_DEBUG("Destroyed {} Framebuffers", this->framebuffers.size());
 
   LOGGER_DEBUG("Destroyed ResourceManager");
 }

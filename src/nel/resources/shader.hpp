@@ -10,6 +10,7 @@ class Shader
   void use();
   void destroy();
   void setInt(const std::string &name, GLint value);
+  void setFloat(const std::string &name, GLfloat value);
   void setFloat(const std::string &name, glm::vec2 value);
   void setFloat(const std::string &name, glm::vec3 value);
   void setFloat(const std::string &name, glm::vec4 value);

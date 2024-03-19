@@ -47,7 +47,7 @@ void RenderSystem3D::render()
 
       if(material.diffuseTexture)
       {
-        material.diffuseTexture.bind();
+        material.diffuseTexture->bind();
         defaultShader.setInt("material.diffuseTexture", 0);
       }
       else
@@ -55,14 +55,14 @@ void RenderSystem3D::render()
         defaultShader.setFloat("material.diffuseColor", material.diffuseColor);
       }
 
-      defaultShader.setInt("material.hasTexture", material.diffuseTexture);
+      defaultShader.setInt("material.hasTexture", static_cast<bool>(material.diffuseTexture));
 
       glm::mat4 model = glm::mat4(1.0f);
       model = glm::translate(model, transform.position);
       // model = glm::toMat4(glm::quat(transform.rotation));
-      model = glm::rotate(model, glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
-      model = glm::rotate(model, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
       model = glm::rotate(model, glm::radians(transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+      model = glm::rotate(model, glm::radians(transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+      model = glm::rotate(model, glm::radians(transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
       model = glm::scale(model, transform.scale);
 
       defaultShader.setMatrix("projectionView", this->cameraSystem->projectionMatrix * this->cameraSystem->viewMatrix);
